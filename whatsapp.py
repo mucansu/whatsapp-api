@@ -2,18 +2,19 @@ import datetime
 import requests
 from twilio.rest import Client
 import json
+from lesson import Lesson
+from students import Students
+from notification_service import NotificationService
 
 with open('config.json') as json_file:
-    config = json.load(json_file)
+  config = json.load(json_file)
 account_sid = config['TWILIO_ACCOUNT_SID']
 auth_token = config['TWILIO_AUTH_TOKEN']
 client = Client(account_sid, auth_token)
-
-message = client.messages.create(
-  from_='whatsapp:+14155238886',
-  body='There is the link : https://us04web.zoom.us/j/73569223136?pwd=tZTulrcYgU5opVgYEDYiwLaOoFhbUd.1',
-  to='whatsapp:+46733955229'
-)
-
+lesson = Lesson(datetime.datetime.now(), datetime.datetime.now() + datetime.timedelta(hours=1), "https://zoom.us/j/1234567890?pwd=QWERTY", 1)
+Students = Students([])
+students_list = Students.get_students()
+notification_service = NotificationService(account_sid, auth_token)
+notification_service.create_notification(students_list)
 
        	
